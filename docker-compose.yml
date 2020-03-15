@@ -1,0 +1,16 @@
+version: "2"
+services:
+  worker:
+    build: .
+    networks:
+    - newport_network  
+    depends_on:
+    - elasticsearch
+  elasticsearch:
+    image: elasticsearch
+    ports:
+      - "9400:9400"
+networks:
+  newport_network:
+    external:
+      name: newport_network
