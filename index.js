@@ -47,15 +47,15 @@ let searchQuery = async (dataSearch) => {
                     }
                 })
                 return result.body.hits.hits[0]._source
-            } else if(dataSearch[i].command === 'add') {
+            } else if (dataSearch[i].command === 'add') {
                 delete dataSearch[i].command
-                let resultCreateIndex =  await client.index({
+                let resultCreateIndex = await client.index({
                     index: 'task',
                     id: 1,
                     type: 'doc',
                     body: dataSearch[i]
                 });
-                console.log(resultCreateIndex.body.created);
+                return resultCreateIndex.body.created
             }
         }
     }
@@ -69,50 +69,10 @@ amqpCon
         await ch.prefetch(1000);
         await ch.consume(queue, async (msg) => {
             const content = await JSON.parse(msg.content);
-              ch.ack(msg);
-              ch.sendToQueue(
+            ch.ack(msg);
+            ch.sendToQueue(
                 msg.properties.replyTo,
                 Buffer.from(JSON.stringify(await searchQuery(content))),
                 { correlationId: msg.properties.correlationId });
         });
     });
-// channel.consume(queue, function (msg) {
-//     console.log(msg);
-//     console.log("[x] Received");
-//     let [dataSearch, i] = [JSON.parse(msg.content), 0]
-//     for (i = 0; i < dataSearch.length; i++) {
-//         if (dataSearch[i].command === 'search') {
-//             client.search({
-//                 index: 'task',
-//                 type: 'doc',
-//                 body: {
-//                     query: {
-//                         match: {
-//                             name: dataSearch[i].name
-//                         }
-//                     }
-//                 }
-//             }).then(async (resp) => {
-//                 console.log(JSON.stringify(resp.body.hits.hits[0]._source));
-//             }).catch((error) => {
-//                 console.error(error);
-//             })
-//         } else if (dataSearch.command === 'modify') {
-//             console.log('hihi');
-//         } else if (dataSearch.command === 'add') {
-//             client.index({
-//                 index: 'task',
-//                 id: i,
-//                 type: 'doc',
-//                 body: dataSearch[i]
-//             }, (error, response) => {
-//                 if (error) {
-//                     throw error
-//                 } else {
-//                     console.log(`${response}`)
-//                 }
-//             })
-//         }
-//     }
-// });
-
