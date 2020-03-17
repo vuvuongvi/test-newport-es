@@ -9,3 +9,5 @@
   - cd test-newport-es
   - npm i
   - npm run start
+
+#When use in local host, please change process.env to local variable

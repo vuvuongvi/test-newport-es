@@ -8,7 +8,9 @@ app.use(bodyParser.urlencoded({
 }));
 const amqp = require('amqplib');
 const uuid = require('uuid/v4')
-const amqpCon = amqp.connect('amqp://localhost');
+require('dotenv').config();
+console.log(process.env.RABBITMQ_PRODUCTION)
+const amqpCon = amqp.connect(process.env.RABBITMQ_PRODUCTION);
 const client = require('./es/connections');
 async function createIndexES() {
     client.indices.create({

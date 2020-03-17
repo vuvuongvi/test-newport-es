@@ -3,14 +3,14 @@ services:
   worker:
     build: .
     networks:
-    - newport_network  
+    - test-newport_newport_network  
     depends_on:
     - elasticsearch
   elasticsearch:
-    image: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.1
     ports:
       - "9400:9400"
 networks:
-  newport_network:
+  test-newport_newport_network:
     external:
-      name: newport_network
+      name: test-newport_newport_network
