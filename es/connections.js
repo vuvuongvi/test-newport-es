@@ -1,8 +1,8 @@
 const { Client } = require('@elastic/elasticsearch')
+const path = require('path')
 require('dotenv').config({path:path.resolve(__dirname, '../.env')})
-console.log(process.env.ES_LOCAL);
 const client = new Client({ 
-    node: process.env.ES_PRODUCTION,
+    node: 'http://localhost:9200',
     apiVersion: 6.7
  })
 client.ping({

@@ -2,27 +2,19 @@ apiVersion: v1
 kind: ReplicationController
 metadata:
   labels:
-    name: mongo
-  name: mongo-controller
+    name: es
+  name: es-controller
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        name: mongo
+        name: es
     spec:
       containers:
-      - image: mongo
-        name: mongo
+      - image: docker.elastic.co/elasticsearch/elasticsearch:6.4.1
+        name: es
         ports:
-        - name: mongo
-          containerPort: 27017
-          hostPort: 27017
-        volumeMounts:
-            - name: mongo-persistent-storage
-              mountPath: /data/db
-      volumes:
-        - name: es-persistent-storage
-          gcePersistentDisk:
-            pdName: mongo-disk
-            fsType: ext4
+        - name: es
+          containerPort: 9200
+          hostPort: 9200
